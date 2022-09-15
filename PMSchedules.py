@@ -3,18 +3,29 @@
 # Which is an issue especially for HS students who have different periods per semester
 # Lots of debug / error catching because I had a lot of issues and wanted to narrow down which sections threw errors
 
+# See the following for table information
+# https://docs.powerschool.com/PSDD/powerschool-tables/cc-4-ver3-6-1
+# https://docs.powerschool.com/PSDD/powerschool-tables/terms-13-ver3-6-1
+
 # importing module
-import oracledb
+import oracledb #used to connect to PowerSchool database
 import sys
-import datetime
-import os
+import datetime #used to get current date for course info
+import os #needed to get environement variables
+import pysftp #used to connect to the Performance Matters sftp site and upload the file
 from datetime import *
 
 un = 'PSNavigator' #PSNavigator is read only, PS is read/write
 pw = os.environ.get('POWERSCHOOL_DB_PASSWORD') #the password for the PSNavigator account
 cs = os.environ.get('POWERSCHOOL_PROD_DB') #the IP address, port, and database name to connect to
 
+#set up sftp login info, stored as environment variables on system
+sftpUN = os.environ.get('PERFORMANCE_MATTERS_SFTP_USERNAME')
+sftpPW = os.environ.get('PERFORMANCE_MATTERS_SFTP_PASSWORD')
+sftpHOST = os.environ.get('PERFORMANCE_MATTERS_SFTP_ADDRESS')
+
 print("Username: " + str(un) + " |Password: " + str(pw) + " |Server: " + str(cs)) #debug so we can see where oracle is trying to connect to/with
+print("SFTP Username: " + str(sftpUN) + " |SFTP Password: " + str(sftpPW) + " |SFTP Server: " + str(sftpHOST)) #debug so we can see where oracle is trying to connect to/with
 badnames = ['USE', 'training1','trianing2','trianing3','trianing4','planning','admin','nurse','user', 'use ', 'payroll', 'human', "benefits", 'test', 'teststudent','test student','testtt','testtest']
 
 with oracledb.connect(user=un, password=pw, dsn=cs) as con: # create the connecton to the database
@@ -96,8 +107,7 @@ with oracledb.connect(user=un, password=pw, dsn=cs) as con: # create the connect
 
                                 except Exception as er:
                                     print('Term Error on ' + str(entrytuple[0]) + ': ' + str(er))
-                                    print('Term Error on ' + str(entrytuple[0]) + ': ' + str(er), file=outputLog)        
-                                
+                                    print('Term Error on ' + str(entrytuple[0]) + ': ' + str(er), file=outputLog)            
 
                     except Exception as err:
                         print('Unknown Error on ' + str(entrytuple[0]) + ': ' + str(err))
@@ -106,3 +116,7 @@ with oracledb.connect(user=un, password=pw, dsn=cs) as con: # create the connect
             except Exception as er:
                 print('High Level Unknown Error: '+str(er))
                 print('High Level Unknown Error: '+str(er), file=outputLog)
+
+with pysftp.Connection(sftpHOST, username=sftpUN, password=sftpPW) as sftp:
+    print(sftp.listdir())  # debug
+    #sftp.put('pmschedules.txt') #upload the file onto the sftp server
