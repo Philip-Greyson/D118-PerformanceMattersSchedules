@@ -23,6 +23,8 @@ cs = os.environ.get('POWERSCHOOL_PROD_DB') #the IP address, port, and database n
 sftpUN = os.environ.get('PERFORMANCE_MATTERS_SFTP_USERNAME')
 sftpPW = os.environ.get('PERFORMANCE_MATTERS_SFTP_PASSWORD')
 sftpHOST = os.environ.get('PERFORMANCE_MATTERS_SFTP_ADDRESS')
+cnopts = pysftp.CnOpts(knownhosts='known_hosts') #connection options to use the known_hosts file for key validation
+
 
 print("Username: " + str(un) + " |Password: " + str(pw) + " |Server: " + str(cs)) #debug so we can see where oracle is trying to connect to/with
 print("SFTP Username: " + str(sftpUN) + " |SFTP Password: " + str(sftpPW) + " |SFTP Server: " + str(sftpHOST)) #debug so we can see where oracle is trying to connect to/with
@@ -116,7 +118,11 @@ with oracledb.connect(user=un, password=pw, dsn=cs) as con: # create the connect
             except Exception as er:
                 print('High Level Unknown Error: '+str(er))
                 print('High Level Unknown Error: '+str(er), file=outputLog)
-
-with pysftp.Connection(sftpHOST, username=sftpUN, password=sftpPW) as sftp:
-    print(sftp.listdir())  # debug
-    #sftp.put('pmschedules.txt') #upload the file onto the sftp server
+#after all the files are done writing and now closed, open an sftp connection to the server and place the file on there
+with pysftp.Connection(sftpHOST, username=sftpUN, password=sftpPW, cnopts=cnopts) as sftp:
+    print('SFTP connection established')
+    # print(sftp.listdir())  # debug
+    sftp.put('pmschedules.txt') #upload the file onto the sftp server
+    print("Schedule file placed on remote server for " + str(today))
+    print("Schedule file placed on remote server for " + str(today), file=outputLog)
+outputLog.close() #close the log file
