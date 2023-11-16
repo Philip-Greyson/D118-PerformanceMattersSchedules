@@ -8,6 +8,7 @@
 # https://ps.powerschool-docs.com/pssis-data-dictionary/latest/terms-13-ver3-6-1
 
 # needs oracledb: pip install oracledb --upgrade
+# needs pysftp: pip install pysftp --upgrade
 
 # importing module
 import oracledb # used to connect to PowerSchool database
@@ -21,9 +22,9 @@ pw = os.environ.get('POWERSCHOOL_DB_PASSWORD') # the password for the database a
 cs = os.environ.get('POWERSCHOOL_PROD_DB') # the IP address, port, and database name to connect to
 
 # set up sftp login info, stored as environment variables on system
-sftpUN = os.environ.get('PERFORMANCE_MATTERS_SFTP_USERNAME')
-sftpPW = os.environ.get('PERFORMANCE_MATTERS_SFTP_PASSWORD')
-sftpHOST = os.environ.get('PERFORMANCE_MATTERS_SFTP_ADDRESS')
+sftpUN = os.environ.get('PERFORMANCE_MATTERS_SFTP_USERNAME') # the username provided by PM to log into their SFTP server
+sftpPW = os.environ.get('PERFORMANCE_MATTERS_SFTP_PASSWORD') # the password provided by PM to log in using the username above
+sftpHOST = os.environ.get('PERFORMANCE_MATTERS_SFTP_ADDRESS') # the URL/server IP provided by PM
 cnopts = pysftp.CnOpts(knownhosts='known_hosts') # connection options to use the known_hosts file for key validation
 
 
