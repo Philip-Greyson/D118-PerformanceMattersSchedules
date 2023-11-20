@@ -1,15 +1,15 @@
 
 # D118-PerformanceMattersSchedules
 
-Gets the PS course data for students in their current term and exports it to a csv for import into Performance Matters
+Gets the PS course data for students in their current term and exports it to a tab delimited .txt file for import into Performance Matters
 
 ## Overview
 
 The script first does a query for all students in PowerSchool. It then begins to go through each student one at a time, only processing further for active students.
 Then it takes the current date and does a query to find all terms from the *terms* table in PowerSchool, and each term's start and end dates are compared to today's date to find the term (or terms) that is currently active for that student.
 A third query is run for the student, finding enrollments from the *cc* table for the current term and student to retrieve the section information and teacher ID. A final query is performed to retrieve the teacher information for that course based on the teacher ID.
-Then all the information about the student, course section, and teacher of that section is printed out to a csv file formatted to align with Performance Matter's template, and the file is closed.
-Then a SFTP connection is established to the Performance Matters server, and the csv file is uploaded to the server.
+Then all the information about the student, course section, and teacher of that section is printed out to a tab delimited.txt file formatted to align with Performance Matter's template, and the file is closed.
+Then a SFTP connection is established to the Performance Matters server, and the .txt file is uploaded to the server.
 
 ## Requirements
 
