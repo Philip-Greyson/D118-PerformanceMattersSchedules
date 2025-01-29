@@ -2,3 +2,4 @@ schedule_log.txt
 pmschedules.txt
 .~lock.pmschedules.txt#
 known_hosts
+ruff.toml

@@ -119,9 +119,13 @@ if __name__ == '__main__': # main file execution
                         print(f'ERROR: Unknown initializion problem: {er}', file=log)
 
                 #after all the files are done writing and now closed, open an sftp connection to the server and place the file on there
-                with pysftp.Connection(sftpHOST, username=sftpUN, password=sftpPW, cnopts=cnopts) as sftp:
-                    print('SFTP connection established')
-                    # print(sftp.listdir())  # debug
-                    sftp.put('pmschedules.txt') #upload the file onto the sftp server
-                    print("Schedule file placed on remote server for " + str(today))
-                    print("Schedule file placed on remote server for " + str(today), file=log)
+                try:
+                    with pysftp.Connection(sftpHOST, username=sftpUN, password=sftpPW, cnopts=cnopts) as sftp:
+                        print('SFTP connection established')
+                        print(sftp.listdir())  # debug
+                        sftp.put('pmschedules.txt') #upload the file onto the sftp server
+                        print("Schedule file placed on remote server for " + str(today))
+                        print("Schedule file placed on remote server for " + str(today), file=log)
+                except Exception as er:
+                    print(f'ERROR while connecting or uploading to Performance Matters SFTP server: {er}')
+                    print(f'ERROR while connecting or uploading to Performance Matters SFTP server: {er}', file=log)
