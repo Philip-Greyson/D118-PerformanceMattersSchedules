@@ -1,3 +1,4 @@
+# https://github.com/Philip-Greyson/D118-PerformanceMattersSchedules
 # Script to export all classes for students in the current term
 # Data Export Manager in PS only lets you choose the entire year term,
 # Which is an issue especially for HS students who have different periods per semester
