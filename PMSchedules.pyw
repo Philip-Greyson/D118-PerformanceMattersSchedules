@@ -75,7 +75,7 @@ if __name__ == '__main__': # main file execution
                                                 termEnd = term[2]
                                                 # print(term) #debug
                                                 #compare todays date to the start and end dates with 20 days before start so it populates before the first day of the term
-                                                if ((termStart - timedelta(days=20) < today) and (termEnd + timedelta(days=1) > today)):
+                                                if ((termStart - timedelta(days=7) < today) and (termEnd + timedelta(days=1) > today)):
                                                     termid = str(term[0])
                                                     termDCID = str(term[4])
                                                     print(f'Found good term for student {idNum}: {termid} | {termDCID}')
